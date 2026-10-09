@@ -47,3 +47,404 @@
     }
     
     /* Bordo laterale colorato */
+    .waste-box.umido { border-left: 8px solid #0088cc; }
+    .waste-box.carta { border-left: 8px solid #9e9e9e; }
+    .waste-box.plastica { border-left: 8px solid #fbc02d; }
+    .waste-box.secco, .waste-box.indifferenziata { border-left: 8px solid #e53935; }
+    .waste-box.vetro { border-left: 8px solid #ab47bc; }
+    .waste-box.sfalci { border-left: 8px solid #2e7d32; }
+    .waste-box.pulizia_strada { border-left: 8px solid #e65100; }
+    .waste-box.nessuno { border-left: 8px solid #b0bec5; }
+
+    .input-comune { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; margin-bottom: 12px; text-align: center; font-weight: 600; }
+
+    /* Layout Configurazione */
+    .day-row { border-bottom: 1px solid #eee; padding: 14px 0; text-align: left; }
+    .day-title { font-weight: bold; margin-bottom: 4px; color: #2563eb; }
+    .day-subtitle { font-size: 0.75rem; color: #888; margin-bottom: 10px; }
+    
+    .waste-config-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+    }
+    .waste-config-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .freq-selector {
+      margin-top: 6px;
+      margin-left: 24px;
+      display: flex;
+      gap: 12px;
+      font-size: 0.78rem;
+      color: #555;
+    }
+    .freq-selector label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    /* Box Info Spiegazione */
+    .info-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-btn:hover { background: #2563eb; }
+    
+    .info-box {
+      display: none;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      text-align: left;
+      font-size: 0.82rem;
+      color: #1e3a8a;
+      line-height: 1.4;
+    }
+    .info-box h3 { font-size: 0.9rem; margin-bottom: 6px; color: #1e40af; }
+    .info-box ul { margin-left: 18px; margin-top: 6px; margin-bottom: 6px; }
+
+    button.btn-main { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 15px; }
+    button.btn-main:hover { background: #1d4ed8; }
+
+    #result { margin-top: 20px; display: none; word-break: break-all; }
+    #qrcode img { display: block; margin: 15px auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    
+    .btn-secondary { background: #6b7280; width: 100%; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 15px; }
+    .btn-download { background: #10b981; width: 100%; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 10px; }
+    .btn-download:hover { background: #059669; }
+
+    /* Footer Credit */
+    .footer-credit { margin-top: 24px; font-size: 0.8rem; color: #9ca3af; font-weight: 500; text-align: center; border-top: 1px dashed #e5e7eb; padding-top: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <!-- VISTA GIORNO -->
+  <div id="view-mode" style="display:none;">
+    <div id="view-comune" class="comune-title"></div>
+    <div id="day-name" class="day-badge">Oggi è: ---</div>
+    <div id="target-day" class="target-day">Da esporre stasera per la raccolta di ---</div>
+    
+    <div id="waste-container" class="waste-container"></div>
+    <button class="btn-secondary" onclick="showConfig()">Modifica Calendario / Comune</button>
+  </div>
+
+  <!-- VISTA CONFIGURAZIONE -->
+  <div id="config-mode">
+    <h1>Configura Calendario</h1>
+    <p style="font-size:0.85rem; color:#666; margin-bottom:12px;">Inserisci il Comune e seleziona i rifiuti.</p>
+    
+    <!-- Pulsante e Box Info Guida -->
+    <button type="button" class="info-btn" onclick="toggleInfoBox()">ℹ️ Come funziona la frequenza?</button>
+    
+    <div id="info-box" class="info-box">
+      <h3>Come impostare la frequenza:</h3>
+      <p>L'anno ha 52 settimane numerate in ordine progressivo da 1 a 52:</p>
+      <ul>
+        <li><b>Tutte le sett.:</b> Il rifiuto viene raccolto ogni settimana.</li>
+        <li><b>Settimane Pari (2, 4, 6, 8...):</b> Il rifiuto viene raccolto a settimane alternate nelle settimane con numero pari dell'anno.</li>
+        <li><b>Settimane Dispari (1, 3, 5, 7...):</b> Il rifiuto viene raccolto a settimane alternate nelle settimane con numero dispari.</li>
+      </ul>
+      <p style="margin-top:4px;"><i>La web app calcola automaticamente la settimana corrente e mostrerà solo il rifiuto corretto del giorno!</i></p>
+    </div>
+
+    <!-- CAMPO NOME COMUNE -->
+    <input type="text" id="comune-input" class="input-comune" placeholder="Inserisci Nome Comune (es. Menfi)" value="">
+
+    <!-- FORM CONFIGURAZIONE GIORNI E RIFIUTI -->
+    <form id="schedule-form">
+      <div id="days-config"></div>
+      <button type="button" class="btn-main" onclick="generateLink()">Genera Link & QR Code</button>
+    </form>
+
+    <div id="result">
+      <hr style="margin:20px 0;">
+      <p style="font-weight:600; font-size:0.9rem;">Scansiona con la fotocamera o copia il link:</p>
+      <div id="qrcode"></div>
+      
+      <button type="button" class="btn-download" onclick="downloadQRCode()">Scarica QR Code</button>
+      
+      <p style="font-weight:600; font-size:0.85rem; color:#555; margin-top:15px;">Link generato per Tag NFC:</p>
+      <input type="text" id="generated-url" readonly onclick="this.select()" style="width:100%; padding:8px; margin:8px 0; border-radius:6px; border:1px solid #ccc; font-size:0.8rem; text-align:center;">
+    </div>
+
+    <div class="footer-credit">Creato da PENDOLAS</div>
+  </div>
+</div>
+
+<script>
+  const daysKeys = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
+  const dayNamesFull = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+  const monthNamesFull = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+  
+  const wasteList = [
+    { key: 'umido', label: 'Umido', icon: 'umido.png' },
+    { key: 'carta', label: 'Carta', icon: 'carta.png' },
+    { key: 'plastica', label: 'Plastica', icon: 'plastica.png' },
+    { key: 'secco', label: 'Secco', icon: 'indifferenziata.png' },
+    { key: 'indifferenziata', label: 'Indifferenziata', icon: 'indifferenziata.png' },
+    { key: 'vetro', label: 'Vetro', icon: 'vetro.png' },
+    { key: 'sfalci', label: 'Verde / Sfalci', icon: 'verde.png' },
+    { key: 'pulizia_strada', label: 'Pulizia Strada', icon: 'auto.png' }
+  ];
+
+  let currentQrImageUrl = '';
+
+  function toggleInfoBox() {
+    const box = document.getElementById('info-box');
+    box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+  }
+
+  // Calcolo numero settimana dell'anno (ISO 8601)
+  function getISOWeek(d) {
+    const date = new Date(d.getTime());
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+    const week1 = new Date(date.getFullYear(), 0, 4);
+    return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+  }
+
+  // COSTRUZIONE INTERFACCIA CONFIGURAZIONE PER CIASCUN GIORNO E RIFIUTO
+  function buildConfigUI() {
+    const container = document.getElementById('days-config');
+    container.innerHTML = '';
+
+    daysKeys.forEach((key, idx) => {
+      const row = document.createElement('div');
+      row.className = 'day-row';
+      const prevIdx = (idx === 0) ? 6 : idx - 1;
+      
+      let html = `<div class="day-title">Passaggio ${dayNamesFull[idx]}</div>`;
+      html += `<div class="day-subtitle">(Da mettere fuori ${dayNamesFull[prevIdx]} sera)</div>`;
+      
+      wasteList.forEach(w => {
+        const fieldId = `${key}_${w.key}`;
+        html += `
+          <div class="waste-config-item">
+            <div class="waste-config-header">
+              <input type="checkbox" id="${fieldId}" name="${key}" value="${w.key}" onchange="toggleFreqOptions('${fieldId}')">
+              <label for="${fieldId}">${w.label}</label>
+            </div>
+            <div class="freq-selector" id="freq_box_${fieldId}" style="display:none;">
+              <label><input type="radio" name="freq_${fieldId}" value="all" checked> Tutte le sett.</label>
+              <label><input type="radio" name="freq_${fieldId}" value="even"> Sett. Pari</label>
+              <label><input type="radio" name="freq_${fieldId}" value="odd"> Sett. Dispari</label>
+            </div>
+          </div>`;
+      });
+
+      row.innerHTML = html;
+      container.appendChild(row);
+    });
+  }
+
+  function toggleFreqOptions(fieldId) {
+    const cb = document.getElementById(fieldId);
+    const freqBox = document.getElementById(`freq_box_${fieldId}`);
+    if (freqBox) {
+      freqBox.style.display = cb.checked ? 'flex' : 'none';
+    }
+  }
+
+  /* --- INIZIALIZZAZIONE PAGINA --- */
+
+  function init() {
+    buildConfigUI();
+    const params = new URLSearchParams(window.location.search);
+    
+    let hasConfig = false;
+    daysKeys.forEach(k => {
+      if (params.has(k)) hasConfig = true;
+    });
+
+    if (hasConfig) {
+      document.getElementById('config-mode').style.display = 'none';
+      document.getElementById('view-mode').style.display = 'block';
+      
+      const comuneName = params.get('comune') || '';
+
+      if (comuneName) {
+        document.getElementById('view-comune').innerText = 'COMUNE DI ' + comuneName.toUpperCase();
+        document.getElementById('view-comune').style.display = 'block';
+      } else {
+        document.getElementById('view-comune').style.display = 'none';
+      }
+
+      const today = new Date();
+      const todayIndex = today.getDay();
+      const todayNum = today.getDate();
+      const todayMonth = monthNamesFull[today.getMonth()];
+      
+      const nextDayIndex = (todayIndex + 1) % 7;
+      const nextDayKey = daysKeys[nextDayIndex];
+
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const tomorrowWeekNum = getISOWeek(tomorrow);
+      const isTomorrowWeekEven = (tomorrowWeekNum % 2 === 0);
+
+      // Data per esteso (es. Oggi è: Venerdì 9 Ottobre)
+      document.getElementById('day-name').innerText = `Oggi è: ${dayNamesFull[todayIndex]}, ${todayNum} ${todayMonth}`;
+      document.getElementById('target-day').innerText = 'Da esporre stasera per la raccolta di ' + dayNamesFull[nextDayIndex] + ':';
+      
+      const wasteContainer = document.getElementById('waste-container');
+      wasteContainer.innerHTML = '';
+
+      const rawVal = params.get(nextDayKey);
+      const items = rawVal ? rawVal.split(',') : [];
+
+      let activeWastes = [];
+
+      items.forEach(itemStr => {
+        if (!itemStr || itemStr === 'nessuno') return;
+
+        const parts = itemStr.split(':');
+        const wKey = parts[0];
+        const freq = parts[1] || 'all';
+
+        let show = false;
+        if (freq === 'all') show = true;
+        else if (freq === 'even' && isTomorrowWeekEven) show = true;
+        else if (freq === 'odd' && !isTomorrowWeekEven) show = true;
+
+        if (show) {
+          activeWastes.push(wKey);
+        }
+      });
+
+      if (activeWastes.length === 0) {
+        wasteContainer.innerHTML = `
+          <div class="waste-box nessuno">
+            <img src="nieterifiuti.png" class="waste-icon" alt="Nessun rifiuto" />
+            <span class="waste-text">NESSUN RIFIUTO STASERA</span>
+          </div>`;
+      } else {
+        activeWastes.forEach(wKey => {
+          const item = wasteList.find(x => x.key === wKey);
+          const labelText = item ? item.label.toUpperCase() : wKey.toUpperCase();
+
+          const imgTag = (item && item.icon) 
+            ? `<img src="${item.icon}" class="waste-icon" alt="${labelText}" />` 
+            : '';
+
+          const box = document.createElement('div');
+          box.className = `waste-box ${wKey}`;
+          box.innerHTML = `${imgTag}<span class="waste-text">${labelText}</span>`;
+          wasteContainer.appendChild(box);
+        });
+      }
+
+      if (comuneName) document.getElementById('comune-input').value = comuneName;
+
+      // RIPOPOLAMENTO CHECKBOX RIFIUTI IN BASE AI PARAMETRI URL
+      daysKeys.forEach(k => {
+        const rawParam = params.get(k) || '';
+        if (rawParam && rawParam !== 'nessuno') {
+          rawParam.split(',').forEach(itemStr => {
+            const parts = itemStr.split(':');
+            const wKey = parts[0];
+            const freq = parts[1] || 'all';
+            
+            const fieldId = `${k}_${wKey}`;
+            const cb = document.getElementById(fieldId);
+            if (cb) {
+              cb.checked = true;
+              toggleFreqOptions(fieldId);
+              const radio = document.querySelector(`input[name="freq_${fieldId}"][value="${freq}"]`);
+              if (radio) radio.checked = true;
+            }
+          });
+        }
+      });
+
+    } else {
+      document.getElementById('config-mode').style.display = 'block';
+      document.getElementById('view-mode').style.display = 'none';
+    }
+  }
+
+  // GENERAZIONE LINK E QR CODE CON PARAMETRI RIFIUTI
+  function generateLink() {
+    const baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+    const searchParams = new URLSearchParams();
+
+    const comuneVal = document.getElementById('comune-input').value.trim();
+    if (comuneVal) {
+      searchParams.set('comune', comuneVal);
+    }
+
+    daysKeys.forEach(key => {
+      const checkedBoxes = Array.from(document.querySelectorAll(`input[name="${key}"]:checked`));
+      
+      const values = checkedBoxes.map(cb => {
+        const fieldId = cb.id;
+        const selectedFreq = document.querySelector(`input[name="freq_${fieldId}"]:checked`)?.value || 'all';
+        return (selectedFreq === 'all') ? cb.value : `${cb.value}:${selectedFreq}`;
+      });
+
+      searchParams.set(key, values.length > 0 ? values.join(',') : 'nessuno');
+    });
+
+    const finalUrl = `${baseUrl}?${searchParams.toString()}`;
+    
+    document.getElementById('generated-url').value = finalUrl;
+    
+    currentQrImageUrl = `https://quickchart.io/qr?text=${encodeURIComponent(finalUrl)}&size=300`;
+    
+    const qrContainer = document.getElementById('qrcode');
+    qrContainer.innerHTML = `<img src="${currentQrImageUrl}" alt="QR Code" width="200" height="200">`;
+
+    document.getElementById('result').style.display = 'block';
+  }
+
+  async function downloadQRCode() {
+    if (!currentQrImageUrl) return;
+    try {
+      const response = await fetch(currentQrImageUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'QR_Raccolta_Differenziata.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      window.open(currentQrImageUrl, '_blank');
+    }
+  }
+
+  function showConfig() {
+    document.getElementById('view-mode').style.display = 'none';
+    document.getElementById('config-mode').style.display = 'block';
+  }
+
+  window.onload = init;
+</script>
+</body>
+</html>
