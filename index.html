@@ -12,7 +12,20 @@
     .comune-title { font-size: 1.1rem; font-weight: 700; color: #2563eb; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
     
     .day-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
-    .target-day { font-size: 0.85rem; color: #666; font-weight: 600; margin-bottom: 16px; }
+    
+    /* MODIFICA: Testo ingrandito, in grassetto e con supporto per il giorno lampeggiante */
+    .target-day { font-size: 1.05rem; color: #111827; font-weight: 800; margin-bottom: 16px; line-height: 1.4; }
+    
+    /* Effetto lampeggiante per il giorno (es. mercoledì) */
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
+    .blinking-day {
+      animation: blink 1.2s infinite;
+      color: #2563eb;
+    }
     
     .waste-container { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
     
@@ -308,7 +321,9 @@
 
       // Data per esteso (es. Oggi è: Venerdì 9 Ottobre)
       document.getElementById('day-name').innerText = `Oggi è: ${dayNamesFull[todayIndex]}, ${todayNum} ${todayMonth}`;
-      document.getElementById('target-day').innerText = 'Da esporre stasera per la raccolta di ' + dayNamesFull[nextDayIndex] + ':';
+      
+      // MODIFICA: Inserimento del giorno della settimana con classe lampeggiante
+      document.getElementById('target-day').innerHTML = `Da esporre stasera per la raccolta di <span class="blinking-day">${dayNamesFull[nextDayIndex]}</span>:`;
       
       const wasteContainer = document.getElementById('waste-container');
       wasteContainer.innerHTML = '';
