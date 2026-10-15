@@ -13,7 +13,7 @@
     
     .day-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
     
-    /* MODIFICA: Frase intera più grande, in grassetto e con animazione lampeggiante */
+    /* MODIFICA: Frase intera più grande, in grassetto, colore lime e con animazione lampeggiante */
     @keyframes blink {
       0% { opacity: 1; }
       50% { opacity: 0.2; }
@@ -21,7 +21,7 @@
     }
     .target-day { 
       font-size: 1.15rem; 
-      color: #2563eb; 
+      color: #65a30d; /* Verde lime (puoi mettere anche 'lime') */
       font-weight: 800; 
       margin-bottom: 16px; 
       line-height: 1.4;
@@ -323,7 +323,7 @@
       // Data per esteso (es. Oggi è: Venerdì 9 Ottobre)
       document.getElementById('day-name').innerText = `Oggi è: ${dayNamesFull[todayIndex]}, ${todayNum} ${todayMonth}`;
       
-      // MODIFICA: Frase intera inserita dinamicamente con applicazione dell'effetto lampeggiante
+      // Frase inserita dinamicamente con applicazione dell'effetto lampeggiante
       document.getElementById('target-day').innerText = `Da esporre stasera per la raccolta di ${dayNamesFull[nextDayIndex]}:`;
       
       const wasteContainer = document.getElementById('waste-container');
