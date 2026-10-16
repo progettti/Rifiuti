@@ -13,19 +13,18 @@
     
     .day-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
     
-    /* MODIFICA: Frase intera più grande, in grassetto, colore lime e con animazione lampeggiante */
+    /* Testo ingrandito, in grassetto e con supporto per il giorno lampeggiante */
+    .target-day { font-size: 1.05rem; color: #111827; font-weight: 800; margin-bottom: 16px; line-height: 1.4; }
+    
+    /* Effetto lampeggiante per il giorno */
     @keyframes blink {
       0% { opacity: 1; }
       50% { opacity: 0.2; }
       100% { opacity: 1; }
     }
-    .target-day { 
-      font-size: 1.15rem; 
-      color: #65a30d; /* Verde lime (puoi mettere anche 'lime') */
-      font-weight: 800; 
-      margin-bottom: 16px; 
-      line-height: 1.4;
+    .blinking-day {
       animation: blink 1.2s infinite;
+      color: #2563eb;
     }
     
     .waste-container { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
@@ -60,15 +59,15 @@
       flex-shrink: 0;
     }
     
-    /* Bordo laterale colorato */
-    .waste-box.umido { border-left: 8px solid #0088cc; }
-    .waste-box.carta { border-left: 8px solid #9e9e9e; }
-    .waste-box.plastica { border-left: 8px solid #fbc02d; }
-    .waste-box.secco, .waste-box.indifferenziata { border-left: 8px solid #e53935; }
-    .waste-box.vetro { border-left: 8px solid #ab47bc; }
-    .waste-box.sfalci { border-left: 8px solid #2e7d32; }
-    .waste-box.pulizia_strada { border-left: 8px solid #e65100; }
-    .waste-box.nessuno { border-left: 8px solid #b0bec5; }
+    /* Bordo laterale colorato uniformato ai colori dei bidoni */
+    .waste-box.carta { border-left: 8px solid #0056b3; }       /* Blu bidone carta */
+    .waste-box.plastica { border-left: 8px solid #fbc02d; }    /* Giallo bidone plastica */
+    .waste-box.umido { border-left: 8px solid #5c3a21; }       /* Marrone bidone umido */
+    .waste-box.secco, .waste-box.indifferenziata { border-left: 8px solid #2b2d42; } /* Antracite bidone secco/indifferenziata */
+    .waste-box.vetro { border-left: 8px solid #2e7d32; }       /* Verde bidone vetro */
+    .waste-box.sfalci { border-left: 8px solid #388e3c; }      /* Verde prato sfalci */
+    .waste-box.pulizia_strada { border-left: 8px solid #e65100; } /* Arancione pulizia strada */
+    .waste-box.nessuno { border-left: 8px solid #b0bec5; }      /* Grigio neutro */
 
     .input-comune { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; margin-bottom: 12px; text-align: center; font-weight: 600; }
 
@@ -320,11 +319,11 @@
       const tomorrowWeekNum = getISOWeek(tomorrow);
       const isTomorrowWeekEven = (tomorrowWeekNum % 2 === 0);
 
-      // Data per esteso (es. Oggi è: Venerdì 9 Ottobre)
+      // Data per esteso
       document.getElementById('day-name').innerText = `Oggi è: ${dayNamesFull[todayIndex]}, ${todayNum} ${todayMonth}`;
       
-      // Frase inserita dinamicamente con applicazione dell'effetto lampeggiante
-      document.getElementById('target-day').innerText = `Da esporre stasera per la raccolta di ${dayNamesFull[nextDayIndex]}:`;
+      // Inserimento del giorno della settimana con classe lampeggiante
+      document.getElementById('target-day').innerHTML = `Da esporre stasera per la raccolta di <span class="blinking-day">${dayNamesFull[nextDayIndex]}</span>:`;
       
       const wasteContainer = document.getElementById('waste-container');
       wasteContainer.innerHTML = '';
