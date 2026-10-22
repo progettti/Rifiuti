@@ -29,12 +29,12 @@
     
     .waste-container { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
     
-    /* Box del Rifiuto con Sfondo Bianco e Bordo Colorato */
+    /* Box del Rifiuto con altezza aumentata (circa mezza card in più) */
     .waste-box { 
       background-color: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 16px; 
-      padding: 16px 20px;
+      padding: 24px 20px; /* Aumentato il padding verticale */
       box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
       display: flex;
       align-items: center;
@@ -51,23 +51,23 @@
       letter-spacing: 0.5px;
     }
 
-    /* Immagine PNG Grande */
+    /* Immagine PNG Ingrandita */
     .waste-icon {
-      width: 70px;
-      height: 70px;
+      width: 90px;
+      height: 90px;
       object-fit: contain;
       flex-shrink: 0;
     }
     
     /* Bordo laterale colorato uniformato ai colori dei bidoni */
-    .waste-box.carta { border-left: 8px solid #0056b3; }       /* Blu bidone carta */
-    .waste-box.plastica { border-left: 8px solid #fbc02d; }    /* Giallo bidone plastica */
-    .waste-box.umido { border-left: 8px solid #5c3a21; }       /* Marrone bidone umido */
-    .waste-box.secco, .waste-box.indifferenziata { border-left: 8px solid #2b2d42; } /* Antracite bidone secco/indifferenziata */
-    .waste-box.vetro { border-left: 8px solid #2e7d32; }       /* Verde bidone vetro */
-    .waste-box.sfalci { border-left: 8px solid #388e3c; }      /* Verde prato sfalci */
-    .waste-box.pulizia_strada { border-left: 8px solid #e65100; } /* Arancione pulizia strada */
-    .waste-box.nessuno { border-left: 8px solid #b0bec5; }      /* Grigio neutro */
+    .waste-box.carta { border-left: 8px solid #0056b3; }       
+    .waste-box.plastica { border-left: 8px solid #fbc02d; }    
+    .waste-box.umido { border-left: 8px solid #5c3a21; }       
+    .waste-box.secco, .waste-box.indifferenziata { border-left: 8px solid #2b2d42; } 
+    .waste-box.vetro { border-left: 8px solid #2e7d32; }       
+    .waste-box.sfalci { border-left: 8px solid #388e3c; }      
+    .waste-box.pulizia_strada { border-left: 8px solid #e65100; } 
+    .waste-box.nessuno { border-left: 8px solid #b0bec5; }      
 
     .input-comune { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; margin-bottom: 12px; text-align: center; font-weight: 600; }
 
@@ -80,7 +80,7 @@
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 10px 12px;
       margin-bottom: 8px;
     }
     .waste-config-header {
@@ -91,6 +91,19 @@
       font-size: 0.9rem;
       cursor: pointer;
     }
+    
+    /* Input per personalizzare il nome del rifiuto */
+    .waste-name-input {
+      margin-top: 6px;
+      margin-left: 24px;
+      width: calc(100% - 24px);
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
     .freq-selector {
       margin-top: 6px;
       margin-left: 24px;
@@ -148,7 +161,6 @@
     .btn-download { background: #10b981; width: 100%; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 10px; }
     .btn-download:hover { background: #059669; }
 
-    /* Footer Credit */
     .footer-credit { margin-top: 24px; font-size: 0.8rem; color: #9ca3af; font-weight: 500; text-align: center; border-top: 1px dashed #e5e7eb; padding-top: 12px; }
   </style>
 </head>
@@ -168,9 +180,8 @@
   <!-- VISTA CONFIGURAZIONE -->
   <div id="config-mode">
     <h1>Configura Calendario</h1>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:12px;">Inserisci il Comune e seleziona i rifiuti.</p>
+    <p style="font-size:0.85rem; color:#666; margin-bottom:12px;">Inserisci il Comune, personalizza i nomi e seleziona i rifiuti.</p>
     
-    <!-- Pulsante e Box Info Guida -->
     <button type="button" class="info-btn" onclick="toggleInfoBox()">ℹ️ Come funziona la frequenza?</button>
     
     <div id="info-box" class="info-box">
@@ -231,7 +242,6 @@
     box.style.display = (box.style.display === 'block') ? 'none' : 'block';
   }
 
-  // Calcolo numero settimana dell'anno (ISO 8601)
   function getISOWeek(d) {
     const date = new Date(d.getTime());
     date.setHours(0, 0, 0, 0);
@@ -240,7 +250,6 @@
     return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
   }
 
-  // COSTRUZIONE INTERFACCIA CONFIGURAZIONE PER CIASCUN GIORNO E RIFIUTO
   function buildConfigUI() {
     const container = document.getElementById('days-config');
     container.innerHTML = '';
@@ -255,12 +264,14 @@
       
       wasteList.forEach(w => {
         const fieldId = `${key}_${w.key}`;
+        const nameInputId = `name_${fieldId}`;
         html += `
           <div class="waste-config-item">
             <div class="waste-config-header">
-              <input type="checkbox" id="${fieldId}" name="${key}" value="${w.key}" onchange="toggleFreqOptions('${fieldId}')">
+              <input type="checkbox" id="${fieldId}" name="${key}" value="${w.key}" onchange="toggleOptions('${fieldId}')">
               <label for="${fieldId}">${w.label}</label>
             </div>
+            <input type="text" id="${nameInputId}" class="waste-name-input" value="${w.label}" placeholder="Personalizza nome..." style="display:none;" />
             <div class="freq-selector" id="freq_box_${fieldId}" style="display:none;">
               <label><input type="radio" name="freq_${fieldId}" value="all" checked> Tutte le sett.</label>
               <label><input type="radio" name="freq_${fieldId}" value="even"> Sett. Pari</label>
@@ -274,15 +285,16 @@
     });
   }
 
-  function toggleFreqOptions(fieldId) {
+  function toggleOptions(fieldId) {
     const cb = document.getElementById(fieldId);
     const freqBox = document.getElementById(`freq_box_${fieldId}`);
-    if (freqBox) {
-      freqBox.style.display = cb.checked ? 'flex' : 'none';
-    }
+    const nameInput = document.getElementById(`name_${fieldId}`);
+    const isVisible = cb.checked ? 'flex' : 'none';
+    const isInputVisible = cb.checked ? 'block' : 'none';
+    
+    if (freqBox) freqBox.style.display = isVisible;
+    if (nameInput) nameInput.style.display = isInputVisible;
   }
-
-  /* --- INIZIALIZZAZIONE PAGINA --- */
 
   function init() {
     buildConfigUI();
@@ -319,10 +331,7 @@
       const tomorrowWeekNum = getISOWeek(tomorrow);
       const isTomorrowWeekEven = (tomorrowWeekNum % 2 === 0);
 
-      // Data per esteso
       document.getElementById('day-name').innerText = `Oggi è: ${dayNamesFull[todayIndex]}, ${todayNum} ${todayMonth}`;
-      
-      // Inserimento del giorno della settimana con classe lampeggiante
       document.getElementById('target-day').innerHTML = `Da esporre stasera per la raccolta di <span class="blinking-day">${dayNamesFull[nextDayIndex]}</span>:`;
       
       const wasteContainer = document.getElementById('waste-container');
@@ -336,9 +345,10 @@
       items.forEach(itemStr => {
         if (!itemStr || itemStr === 'nessuno') return;
 
-        const parts = itemStr.split(':');
+        const parts = itemStr.split('|');
         const wKey = parts[0];
-        const freq = parts[1] || 'all';
+        const customName = parts[1] ? decodeURIComponent(parts[1]) : null;
+        const freq = parts[2] || 'all';
 
         let show = false;
         if (freq === 'all') show = true;
@@ -346,7 +356,7 @@
         else if (freq === 'odd' && !isTomorrowWeekEven) show = true;
 
         if (show) {
-          activeWastes.push(wKey);
+          activeWastes.push({ key: wKey, name: customName });
         }
       });
 
@@ -357,16 +367,17 @@
             <span class="waste-text">NESSUN RIFIUTO STASERA</span>
           </div>`;
       } else {
-        activeWastes.forEach(wKey => {
-          const item = wasteList.find(x => x.key === wKey);
-          const labelText = item ? item.label.toUpperCase() : wKey.toUpperCase();
+        activeWastes.forEach(obj => {
+          const item = wasteList.find(x => x.key === obj.key);
+          const defaultLabel = item ? item.label : obj.key;
+          const labelText = (obj.name ? obj.name : defaultLabel).toUpperCase();
 
           const imgTag = (item && item.icon) 
             ? `<img src="${item.icon}" class="waste-icon" alt="${labelText}" />` 
             : '';
 
           const box = document.createElement('div');
-          box.className = `waste-box ${wKey}`;
+          box.className = `waste-box ${obj.key}`;
           box.innerHTML = `${imgTag}<span class="waste-text">${labelText}</span>`;
           wasteContainer.appendChild(box);
         });
@@ -374,20 +385,24 @@
 
       if (comuneName) document.getElementById('comune-input').value = comuneName;
 
-      // RIPOPOLAMENTO CHECKBOX RIFIUTI IN BASE AI PARAMETRI URL
+      // Ripopolamento configurazione da URL
       daysKeys.forEach(k => {
         const rawParam = params.get(k) || '';
         if (rawParam && rawParam !== 'nessuno') {
           rawParam.split(',').forEach(itemStr => {
-            const parts = itemStr.split(':');
+            const parts = itemStr.split('|');
             const wKey = parts[0];
-            const freq = parts[1] || 'all';
+            const customName = parts[1] ? decodeURIComponent(parts[1]) : '';
+            const freq = parts[2] || 'all';
             
             const fieldId = `${k}_${wKey}`;
             const cb = document.getElementById(fieldId);
             if (cb) {
               cb.checked = true;
-              toggleFreqOptions(fieldId);
+              toggleOptions(fieldId);
+              if (customName) {
+                document.getElementById(`name_${fieldId}`).value = customName;
+              }
               const radio = document.querySelector(`input[name="freq_${fieldId}"][value="${freq}"]`);
               if (radio) radio.checked = true;
             }
@@ -401,7 +416,6 @@
     }
   }
 
-  // GENERAZIONE LINK E QR CODE CON PARAMETRI RIFIUTI
   function generateLink() {
     const baseUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
     const searchParams = new URLSearchParams();
@@ -416,15 +430,28 @@
       
       const values = checkedBoxes.map(cb => {
         const fieldId = cb.id;
-        const selectedFreq = document.querySelector(`input[name="freq_${fieldId}"]:checked`)?.value || 'all';
-        return (selectedFreq === 'all') ? cb.value : `${cb.value}:${selectedFreq}`;
+        const customNameVal = document.getElementById(`name_${fieldId}`).value.trim();
+        const defaultItem = wasteList.find(x => x.key === cb.value);
+        const defaultLabel = defaultItem ? defaultItem.label : cb.value;
+        
+        const selectedFreq = document.querySelector(`input[name="freq_${fieldId}"][value="all"]:checked`) ? 'all' : (document.querySelector(`input[name="freq_${fieldId}"]:checked`)?.value || 'all');
+        
+        let partName = (customNameVal && customNameVal !== defaultLabel) ? `|${encodeURIComponent(customNameVal)}` : '';
+        let partFreq = (selectedFreq !== 'all') ? `|${selectedFreq}` : (partName ? '|all' : '');
+
+        if (!partName && !partFreq) {
+          return cb.value;
+        } else if (partName && !partFreq) {
+          return `${cb.value}${partName}`;
+        } else {
+          return `${cb.value}${partName || '|'}${selectedFreq !== 'all' ? '|' + selectedFreq : ''}`;
+        }
       });
 
       searchParams.set(key, values.length > 0 ? values.join(',') : 'nessuno');
     });
 
     const finalUrl = `${baseUrl}?${searchParams.toString()}`;
-    
     document.getElementById('generated-url').value = finalUrl;
     
     currentQrImageUrl = `https://quickchart.io/qr?text=${encodeURIComponent(finalUrl)}&size=300`;
