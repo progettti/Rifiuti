@@ -7,45 +7,51 @@
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
     body { background-color: #f4f6f8; color: #333; display: flex; justify-content: center; padding: 20px; }
-    .card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 24px; width: 100%; max-width: 480px; text-align: center; position: relative; }
+    .card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 24px; width: 100%; max-width: 540px; text-align: center; position: relative; }
     h1 { font-size: 1.4rem; margin-bottom: 8px; color: #1a1a1a; }
     .comune-title { font-size: 1.1rem; font-weight: 700; color: #2563eb; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
     
-    .day-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
+    .day-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; margin-bottom: 10px; }
     
-    /* Testo ingrandito, in grassetto e con supporto per il giorno lampeggiante */
-    .target-day { font-size: 1.05rem; color: #111827; font-weight: 800; margin-bottom: 16px; line-height: 1.4; }
+    /* Testo descrittivo iniziale */
+    .target-day { font-size: 1rem; color: #4b5563; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
     
-    /* Effetto lampeggiante per il giorno */
+    /* Giorno della settimana lampeggiante, ingrandito ed evidenziato */
     @keyframes blink {
       0% { opacity: 1; }
       50% { opacity: 0.2; }
       100% { opacity: 1; }
     }
     .blinking-day {
+      display: inline-block;
       animation: blink 1.2s infinite;
       color: #2563eb;
+      font-size: 1.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
     }
     
-    .waste-container { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+    .waste-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
     
-    /* Box del Rifiuto con altezza aumentata (circa mezza card in più) */
+    /* Box del Rifiuto con altezza aumentata */
     .waste-box { 
       background-color: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 16px; 
-      padding: 24px 20px; /* Aumentato il padding verticale */
+      border-radius: 18px; 
+      padding: 36px 24px; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      gap: 20px;
+      gap: 24px;
     }
 
-    /* Testo del Rifiuto in Nero e Grassetto */
+    /* Testo del Rifiuto */
     .waste-text {
       color: #111827;
-      font-size: 1.3rem;
+      font-size: 1.5rem; 
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -53,21 +59,21 @@
 
     /* Immagine PNG Ingrandita */
     .waste-icon {
-      width: 90px;
-      height: 90px;
+      width: 110px; 
+      height: 110px;
       object-fit: contain;
       flex-shrink: 0;
     }
     
     /* Bordo laterale colorato uniformato ai colori dei bidoni */
-    .waste-box.carta { border-left: 8px solid #0056b3; }       
-    .waste-box.plastica { border-left: 8px solid #fbc02d; }    
-    .waste-box.umido { border-left: 8px solid #5c3a21; }       
-    .waste-box.secco, .waste-box.indifferenziata { border-left: 8px solid #2b2d42; } 
-    .waste-box.vetro { border-left: 8px solid #2e7d32; }       
-    .waste-box.sfalci { border-left: 8px solid #388e3c; }      
-    .waste-box.pulizia_strada { border-left: 8px solid #e65100; } 
-    .waste-box.nessuno { border-left: 8px solid #b0bec5; }      
+    .waste-box.carta { border-left: 10px solid #0056b3; }       
+    .waste-box.plastica { border-left: 10px solid #fbc02d; }    
+    .waste-box.umido { border-left: 10px solid #5c3a21; }       
+    .waste-box.secco, .waste-box.indifferenziata { border-left: 10px solid #2b2d42; } 
+    .waste-box.vetro { border-left: 10px solid #2e7d32; }       
+    .waste-box.sfalci { border-left: 10px solid #388e3c; }      
+    .waste-box.pulizia_strada { border-left: 10px solid #e65100; } 
+    .waste-box.nessuno { border-left: 10px solid #b0bec5; }      
 
     .input-comune { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; margin-bottom: 12px; text-align: center; font-weight: 600; }
 
@@ -92,7 +98,6 @@
       cursor: pointer;
     }
     
-    /* Input per personalizzare il nome del rifiuto */
     .waste-name-input {
       margin-top: 6px;
       margin-left: 24px;
@@ -171,7 +176,8 @@
   <div id="view-mode" style="display:none;">
     <div id="view-comune" class="comune-title"></div>
     <div id="day-name" class="day-badge">Oggi è: ---</div>
-    <div id="target-day" class="target-day">Da esporre stasera per la raccolta di ---</div>
+    <div class="target-day">Da esporre stasera per la raccolta di:</div>
+    <div id="target-day-name" class="blinking-day">---</div>
     
     <div id="waste-container" class="waste-container"></div>
     <button class="btn-secondary" onclick="showConfig()">Modifica Calendario / Comune</button>
@@ -332,7 +338,7 @@
       const isTomorrowWeekEven = (tomorrowWeekNum % 2 === 0);
 
       document.getElementById('day-name').innerText = `Oggi è: ${dayNamesFull[todayIndex]}, ${todayNum} ${todayMonth}`;
-      document.getElementById('target-day').innerHTML = `Da esporre stasera per la raccolta di <span class="blinking-day">${dayNamesFull[nextDayIndex]}</span>:`;
+      document.getElementById('target-day-name').innerText = dayNamesFull[nextDayIndex];
       
       const wasteContainer = document.getElementById('waste-container');
       wasteContainer.innerHTML = '';
