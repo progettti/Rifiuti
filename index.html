@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raccolta Differenziata</title>
   <style>
-    /* 🎛️ MODIFICA QUI LE GRANDEZZE DEI FONT (in rem o px) */
+    /* 🎛️ MODIFICA QUI LE GRANDEZZE DEI FONT (puoi cambiare i valori in pixel px) */
     :root {
-      --waste-font-size: 0.95rem;     /* Font nomi rifiuti (es. Indifferenziata, Vetro, ecc.) */
-      --blinking-day-size: 1.35rem;   /* Font del giorno della settimana lampeggiante */
+      --waste-font-size: 18px;     /* Font nomi rifiuti (es. Indifferenziata, Vetro, ecc.) */
+      --blinking-day-size: 24px;   /* Font del giorno della settimana lampeggiante */
     }
 
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
@@ -19,7 +19,7 @@
     
     .day-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
     
-    /* Testo "Da esporre stasera..." con font regolabile per la parola lampeggiante */
+    /* Testo "Da esporre stasera..." */
     .target-day { font-size: 1.05rem; color: #111827; font-weight: 800; margin-bottom: 16px; line-height: 1.4; }
     
     /* Effetto lampeggiante ed ingrandito per il giorno */
@@ -65,7 +65,7 @@
       flex: 1;
     }
 
-    /* Immagine PNG Ingrandita */
+    /* Immagine PNG */
     .waste-icon {
       width: 80px;
       height: 80px;
@@ -106,7 +106,6 @@
       cursor: pointer;
     }
     
-    /* Input per personalizzare il nome del rifiuto */
     .waste-name-input {
       margin-top: 6px;
       margin-left: 24px;
@@ -133,7 +132,6 @@
       cursor: pointer;
     }
 
-    /* Box Info Spiegazione */
     .info-btn {
       background: #3b82f6;
       color: white;
