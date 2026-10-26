@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raccolta Differenziata</title>
   <style>
-    /* 🎛️ MODIFICA QUI LA GRANDEZZA DEL FONT DEI RIFIUTI (es. 1rem, 1.1rem, ecc.) */
+    /* 🎛️ MODIFICA QUI LE GRANDEZZE DEI FONT (in rem o px) */
     :root {
-      --waste-font-size: 1.1rem;
+      --waste-font-size: 0.95rem;     /* Font nomi rifiuti (es. Indifferenziata, Vetro, ecc.) */
+      --blinking-day-size: 1.35rem;   /* Font del giorno della settimana lampeggiante */
     }
 
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
@@ -18,10 +19,10 @@
     
     .day-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
     
-    /* Testo ingrandito, in grassetto e con supporto per il giorno lampeggiante */
+    /* Testo "Da esporre stasera..." con font regolabile per la parola lampeggiante */
     .target-day { font-size: 1.05rem; color: #111827; font-weight: 800; margin-bottom: 16px; line-height: 1.4; }
     
-    /* Effetto lampeggiante per il giorno */
+    /* Effetto lampeggiante ed ingrandito per il giorno */
     @keyframes blink {
       0% { opacity: 1; }
       50% { opacity: 0.2; }
@@ -30,24 +31,28 @@
     .blinking-day {
       animation: blink 1.2s infinite;
       color: #2563eb;
+      font-size: var(--blinking-day-size);
+      font-weight: 900;
+      display: inline-block;
+      vertical-align: middle;
     }
     
     .waste-container { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
     
-    /* Box del Rifiuto con altezza aumentata */
+    /* Box del Rifiuto */
     .waste-box { 
       background-color: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 16px; 
-      padding: 24px 20px;
+      padding: 20px 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      gap: 20px;
+      gap: 16px;
     }
 
-    /* Testo del Rifiuto regolabile e con andata a capo automatica */
+    /* Testo del Rifiuto regolabile e protetto dall'overflow */
     .waste-text {
       color: #111827;
       font-size: var(--waste-font-size);
@@ -62,8 +67,8 @@
 
     /* Immagine PNG Ingrandita */
     .waste-icon {
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       object-fit: contain;
       flex-shrink: 0;
     }
