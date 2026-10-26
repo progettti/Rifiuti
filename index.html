@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promemoria Farmaci Anziani</title>
   <style>
-    /* MODIFICA QUI LA GRANDEZZA DEL FONT DEI NOMI (es. 0.9rem, 1rem, ecc.) */
+    /* MODIFICA QUI LA GRANDEZZA DEL FONT DEI NOMI (es. 0.85rem, 0.95rem, ecc.) */
     :root {
-      --med-name-size: 0.95rem; 
+      --med-name-size: 0.9rem; 
     }
 
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
@@ -187,7 +187,7 @@
   // Logica di attivazione dell'allarme
   let alarmActive = false;
   function checkAlarm(currentTime) {
-    if (alarmActive) return;
+    if (alarmActive) return; // Evita di far sovrapporre i trigger nello stesso minuto
 
     schedule.forEach((med, index) => {
       if (med.time === currentTime) {
@@ -206,6 +206,7 @@
     
     audio.play().catch(e => console.log("Interazione richiesta per l'audio"));
 
+    // Se il farmaco era "una tantum" (ripeti = false), lo rimuoviamo o lo disattiviamo dalla lista
     if (!med.repeat) {
       schedule.splice(index, 1);
       localStorage.setItem('med_schedule', JSON.stringify(schedule));
@@ -220,6 +221,7 @@
     audio.pause();
     audio.currentTime = 0;
     
+    // Riabilita i controlli dopo un minuto per evitare doppi squilli immediati
     setTimeout(() => { alarmActive = false; }, 60000);
     renderViewMode();
   }
@@ -269,12 +271,13 @@
     let newSchedule = [];
 
     rows.forEach(row => {
-      const time = row.querySelector('.cfg-time').value;
+      const time = row.querySelector('.cfg-time`').value; // piccola correzione interna se serve, o standard
+      const timeVal = row.querySelector('.cfg-time').value;
       const name = row.querySelector('.cfg-name').value.trim();
       const repeat = row.querySelector('.cfg-repeat').checked;
 
-      if (time && name) {
-        newSchedule.push({ time, name, repeat });
+      if (timeVal && name) {
+        newSchedule.push({ time: timeVal, name, repeat });
       }
     });
 
