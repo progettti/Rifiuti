@@ -5,46 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raccolta Differenziata</title>
   <style>
-    /* 🎛️ REGOLAZIONE MISURE, FONT, ALTEZZA E LARGHEZZA (Tutto espresso rigorosamente in PX) */
+    /* 🎛️ MODIFICA QUI LE GRANDEZZI, FONT E COLORI (Tutte le misure in pixel px) */
     :root {
-      /* --- GRANDEZZA FONT (px) --- */
-      --waste-font-size: 17px;        /* Font nomi rifiuti (es. Indifferenziata, Vetro, ecc.) */
-      --blinking-day-size: 26px;      /* Font del giorno della settimana lampeggiante */
-      --main-title-size: 22px;        /* Font titolo principale (Configura Calendario) */
-      --comune-title-size: 18px;      /* Font titolo Comune */
-      --day-badge-size: 15px;         /* Font badge oggi */
-      --target-day-size: 17px;        /* Font "Da esporre stasera..." */
-      --body-font-size: 16px;         /* Font generale / input */
-      --btn-font-size: 16px;          /* Font pulsanti principali */
-      --small-font-size: 13px;        /* Font indicazioni secondarie / info */
-      --footer-font-size: 13px;       /* Font footer credit */
-
-      /* --- DIMENSIONI CARD PRINCIPALE E WASTE BOX (px) --- */
-      --main-card-max-width: 480px;   /* Larghezza massima della card contenitore */
-      --main-card-padding: 24px;      /* Padding interno card contenitore */
-      --main-card-radius: 16px;       /* Raggio angoli card contenitore */
-
-      --waste-box-min-height: 110px;  /* Altezza minima card rifiuto (AUMENTATA per renderle più alte) */
-      --waste-box-padding-v: 24px;    /* Padding verticale card rifiuto */
-      --waste-box-padding-h: 20px;    /* Padding orizzontale card rifiuto */
-      --waste-box-radius: 16px;       /* Raggio angoli card rifiuto */
-      --waste-box-border-left: 10px;  /* Spessore bordo colorato laterale */
-      --waste-box-gap: 16px;          /* Spazio tra icona e testo rifiuto */
-
-      --waste-icon-size: 85px;        /* Dimensione icona PNG rifiuto (larghezza e altezza) */
-      --waste-container-gap: 16px;    /* Distanza verticale tra le card rifiuti */
+      /* Dimensioni e Colori Scheda Principale */
+      --card-max-width: 480px;
+      --card-padding: 24px;
+      --card-border-radius: 16px;
+      
+      /* Titolo Principale e Nome Comune */
+      --h1-font-size: 22px;
+      --comune-font-size: 18px;
+      --comune-color: #2563eb;         /* 🎨 Cambia qui il colore del nome Comune */
+      
+      /* Badge Giorno e Testo Evidenziato */
+      --day-badge-font-size: 15px;
+      --target-day-font-size: 17px;
+      --blinking-day-size: 24px;        /* Font giorno lampeggiante */
+      
+      /* Box del Rifiuto (Card Rifiuto) */
+      --waste-box-min-height: 110px;    /* Altezza minima card rifiuto (rendendole più alte) */
+      --waste-box-padding: 20px;        /* Padding interno card */
+      --waste-font-size: 18px;          /* Font nomi rifiuti (es. Indifferenziata, Vetro, ecc.) */
+      --waste-icon-size: 80px;          /* Dimensione icona PNG */
+      --waste-border-radius: 16px;
+      
+      /* Pulsanti e Form */
+      --button-font-size: 16px;
+      --button-padding: 12px;
+      --button-border-radius: 8px;
+      --input-font-size: 16px;
     }
 
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-    body { background-color: #f4f6f8; color: #333; display: flex; justify-content: center; padding: 20px; font-size: var(--body-font-size); }
-    .card { background: white; border-radius: var(--main-card-radius); box-shadow: 0px 4px 20px rgba(0,0,0,0.08); padding: var(--main-card-padding); width: 100%; max-width: var(--main-card-max-width); text-align: center; position: relative; }
-    h1 { font-size: var(--main-title-size); margin-bottom: 8px; color: #1a1a1a; }
-    .comune-title { font-size: var(--comune-title-size); font-weight: 700; color: #2563eb; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    body { background-color: #f4f6f8; color: #333; display: flex; justify-content: center; padding: 20px; }
     
-    .day-badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: var(--day-badge-size); margin-bottom: 8px; }
+    .card { 
+      background: white; 
+      border-radius: var(--card-border-radius); 
+      box-shadow: 0px 4px 20px rgba(0,0,0,0.08); 
+      padding: var(--card-padding); 
+      width: 100%; 
+      max-width: var(--card-max-width); 
+      text-align: center; 
+      position: relative; 
+    }
+
+    h1 { font-size: var(--h1-font-size); margin-bottom: 8px; color: #1a1a1a; }
+    
+    .comune-title { 
+      font-size: var(--comune-font-size); 
+      font-weight: 700; 
+      color: var(--comune-color); 
+      margin-bottom: 16px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+    }
+    
+    .day-badge { 
+      display: inline-block; 
+      background: #e0e7ff; 
+      color: #3730a3; 
+      padding: 6px 16px; 
+      border-radius: 20px; 
+      font-weight: 600; 
+      font-size: var(--day-badge-font-size); 
+      margin-bottom: 8px; 
+    }
     
     /* Testo "Da esporre stasera..." */
-    .target-day { font-size: var(--target-day-size); color: #111827; font-weight: 800; margin-bottom: 16px; line-height: 1.4; }
+    .target-day { 
+      font-size: var(--target-day-font-size); 
+      color: #111827; 
+      font-weight: 800; 
+      margin-bottom: 16px; 
+      line-height: 1.4; 
+    }
     
     /* Effetto lampeggiante ed ingrandito per il giorno */
     @keyframes blink {
@@ -61,20 +96,20 @@
       vertical-align: middle;
     }
     
-    .waste-container { display: flex; flex-direction: column; gap: var(--waste-container-gap); margin-bottom: 20px; }
+    .waste-container { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
     
-    /* Box del Rifiuto (Reso più alto e gestito da variabili px) */
+    /* Box del Rifiuto */
     .waste-box { 
       background-color: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: var(--waste-box-radius); 
-      padding: var(--waste-box-padding-v) var(--waste-box-padding-h);
+      border-radius: var(--waste-border-radius); 
+      padding: var(--waste-box-padding);
       min-height: var(--waste-box-min-height);
       box-shadow: 0px 4px 12px rgba(0,0,0,0.05); 
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      gap: var(--waste-box-gap);
+      gap: 16px;
     }
 
     /* Testo del Rifiuto regolabile e protetto dall'overflow */
@@ -99,20 +134,29 @@
     }
     
     /* Bordo laterale colorato uniformato ai colori dei bidoni */
-    .waste-box.carta { border-left: var(--waste-box-border-left) solid #0056b3; }        
-    .waste-box.plastica { border-left: var(--waste-box-border-left) solid #fbc02d; }    
-    .waste-box.umido { border-left: var(--waste-box-border-left) solid #5c3a21; }        
-    .waste-box.secco, .waste-box.indifferenziata { border-left: var(--waste-box-border-left) solid #2b2d42; } 
-    .waste-box.vetro { border-left: var(--waste-box-border-left) solid #2e7d32; }        
-    .waste-box.sfalci { border-left: var(--waste-box-border-left) solid #388e3c; }      
-    .waste-box.pulizia_strada { border-left: var(--waste-box-border-left) solid #e65100; } 
-    .waste-box.nessuno { border-left: var(--waste-box-border-left) solid #b0bec5; }      
+    .waste-box.carta { border-left: 8px solid #0056b3; }        
+    .waste-box.plastica { border-left: 8px solid #fbc02d; }    
+    .waste-box.umido { border-left: 8px solid #5c3a21; }        
+    .waste-box.secco, .waste-box.indifferenziata { border-left: 8px solid #2b2d42; } 
+    .waste-box.vetro { border-left: 8px solid #2e7d32; }        
+    .waste-box.sfalci { border-left: 8px solid #388e3c; }      
+    .waste-box.pulizia_strada { border-left: 8px solid #e65100; } 
+    .waste-box.nessuno { border-left: 8px solid #b0bec5; }      
 
-    .input-comune { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: var(--btn-font-size); margin-bottom: 12px; text-align: center; font-weight: 600; }
+    .input-comune { 
+      width: 100%; 
+      padding: 10px 12px; 
+      border-radius: var(--button-border-radius); 
+      border: 1px solid #ccc; 
+      font-size: var(--input-font-size); 
+      margin-bottom: 12px; 
+      text-align: center; 
+      font-weight: 600; 
+    }
 
     /* Layout Configurazione */
     .day-row { border-bottom: 1px solid #eee; padding: 14px 0px; text-align: left; }
-    .day-title { font-weight: bold; margin-bottom: 4px; color: #2563eb; }
+    .day-title { font-weight: bold; margin-bottom: 4px; color: #2563eb; font-size: 15px; }
     .day-subtitle { font-size: 12px; color: #888; margin-bottom: 10px; }
     
     .waste-config-item {
@@ -163,7 +207,7 @@
       border: none;
       padding: 8px 14px;
       border-radius: 20px;
-      font-size: var(--small-font-size);
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       margin-bottom: 16px;
@@ -188,17 +232,50 @@
     .info-box h3 { font-size: 14px; margin-bottom: 6px; color: #1e40af; }
     .info-box ul { margin-left: 18px; margin-top: 6px; margin-bottom: 6px; }
 
-    button.btn-main { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-size: var(--btn-font-size); font-weight: 600; cursor: pointer; margin-top: 15px; }
+    button.btn-main { 
+      width: 100%; 
+      background: #2563eb; 
+      color: white; 
+      border: none; 
+      padding: var(--button-padding); 
+      border-radius: var(--button-border-radius); 
+      font-size: var(--button-font-size); 
+      font-weight: 600; 
+      cursor: pointer; 
+      margin-top: 15px; 
+    }
     button.btn-main:hover { background: #1d4ed8; }
 
     #result { margin-top: 20px; display: none; word-break: break-all; }
     #qrcode img { display: block; margin: 15px auto; border-radius: 8px; box-shadow: 0px 2px 10px rgba(0,0,0,0.1); }
     
-    .btn-secondary { background: #6b7280; width: 100%; color: white; border: none; padding: 12px; border-radius: 8px; font-size: var(--btn-font-size); font-weight: 600; cursor: pointer; margin-top: 15px; }
-    .btn-download { background: #10b981; width: 100%; color: white; border: none; padding: 12px; border-radius: 8px; font-size: var(--btn-font-size); font-weight: 600; cursor: pointer; margin-top: 10px; }
+    .btn-secondary { 
+      background: #6b7280; 
+      width: 100%; 
+      color: white; 
+      border: none; 
+      padding: var(--button-padding); 
+      border-radius: var(--button-border-radius); 
+      font-size: var(--button-font-size); 
+      font-weight: 600; 
+      cursor: pointer; 
+      margin-top: 15px; 
+    }
+    .btn-download { 
+      background: #10b981; 
+      width: 100%; 
+      color: white; 
+      border: none; 
+      padding: var(--button-padding); 
+      border-radius: var(--button-border-radius); 
+      font-size: var(--button-font-size); 
+      font-weight: 600; 
+      cursor: pointer; 
+      margin-top: 10px; 
+    }
     .btn-download:hover { background: #059669; }
 
-    .footer-credit { margin-top: 24px; font-size: var(--footer-font-size); color: #9ca3af; font-weight: 500; text-align: center; border-top: 1px dashed #e5e7eb; padding-top: 12px; }
+    .footer-credit { margin-top: 24px; font-size: 13px; color: #9ca3af; font-weight: 500; text-align: center; border-top: 1px dashed #e5e7eb; padding-top: 12px; }
   </style>
 </head>
 <body>
@@ -217,7 +294,7 @@
   <!-- VISTA CONFIGURAZIONE -->
   <div id="config-mode">
     <h1>Configura Calendario</h1>
-    <p style="font-size:13px; color:#666; margin-bottom:12px;">Inserisci il Comune, personalizza i nomi e seleziona i rifiuti.</p>
+    <p style="font-size:14px; color:#666; margin-bottom:12px;">Inserisci il Comune, personalizza i nomi e seleziona i rifiuti.</p>
     
     <button type="button" class="info-btn" onclick="toggleInfoBox()">ℹ️ Come funziona la frequenza?</button>
     
@@ -242,14 +319,14 @@
     </form>
 
     <div id="result">
-      <hr style="margin:20px 0px;">
+      <hr style="margin:20px 0;">
       <p style="font-weight:600; font-size:14px;">Scansiona con la fotocamera o copia il link:</p>
       <div id="qrcode"></div>
       
       <button type="button" class="btn-download" onclick="downloadQRCode()">Scarica QR Code</button>
       
       <p style="font-weight:600; font-size:13px; color:#555; margin-top:15px;">Link generato per Tag NFC:</p>
-      <input type="text" id="generated-url" readonly onclick="this.select()" style="width:100%; padding:8px; margin:8px 0px; border-radius:6px; border:1px solid #ccc; font-size:13px; text-align:center;">
+      <input type="text" id="generated-url" readonly onclick="this.select()" style="width:100%; padding:8px; margin:8px 0; border-radius:6px; border:1px solid #ccc; font-size:13px; text-align:center;">
     </div>
 
     <div class="footer-credit">Creato da PENDOLAS</div>
@@ -349,7 +426,7 @@
       const comuneName = params.get('comune') || '';
 
       if (comuneName) {
-        document.getElementById('view-comune').innerText = 'COMUNE DI ' + comuneName.toUpperCase();
+        document.getElementById('view-comune').innerText = 'COMUNE DI: ' + comuneName.toUpperCase();
         document.getElementById('view-comune').style.display = 'block';
       } else {
         document.getElementById('view-comune').style.display = 'none';
