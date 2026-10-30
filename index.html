@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raccolta Differenziata</title>
   <style>
-    /* 🎛️ MODIFICA QUI LE GRANDEZZI, FONT E COLORI (Tutte le misure in pixel px) */
+    /* 🎛️ MODIFICA QUI LE GRANDEZZE, FONT E COLORI (Tutte le misure in pixel px) */
     :root {
       /* Dimensioni e Colori Scheda Principale */
       --card-max-width: 480px;
@@ -23,9 +23,9 @@
       --blinking-day-size: 24px;        /* Font giorno lampeggiante */
       
       /* Box del Rifiuto (Card Rifiuto) */
-      --waste-box-min-height: 110px;    /* Altezza minima card rifiuto (rendendole più alte) */
+      --waste-box-min-height: 110px;    /* Altezza minima card rifiuto */
       --waste-box-padding: 20px;        /* Padding interno card */
-      --waste-font-size: 18px;          /* Font nomi rifiuti (es. Indifferenziata, Vetro, ecc.) */
+      --waste-font-size: 18px;          /* Font nomi rifiuti */
       --waste-icon-size: 80px;          /* Dimensione icona PNG */
       --waste-border-radius: 16px;
       
@@ -310,7 +310,7 @@
     </div>
 
     <!-- CAMPO NOME COMUNE -->
-    <input type="text" id="comune-input" class="input-comune" placeholder="Inserisci Nome Comune (es. Menfi)" value="">
+    <input type="text" id="comune-input" class="input-comune" placeholder="Inserisci Nome Comune (es. Paullo)" value="">
 
     <!-- FORM CONFIGURAZIONE GIORNI E RIFIUTI -->
     <form id="schedule-form">
@@ -426,7 +426,7 @@
       const comuneName = params.get('comune') || '';
 
       if (comuneName) {
-        document.getElementById('view-comune').innerText = 'COMUNE DI: ' + comuneName.toUpperCase();
+        document.getElementById('view-comune').innerText = 'COMUNE DI : ' + comuneName.toUpperCase();
         document.getElementById('view-comune').style.display = 'block';
       } else {
         document.getElementById('view-comune').style.display = 'none';
